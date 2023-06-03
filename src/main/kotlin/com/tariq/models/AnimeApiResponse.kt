@@ -1,0 +1,12 @@
+package com.tariq.models
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class AnimeApiResponse(
+    val success: Boolean,
+    val message: String? = null,
+    val previousPage: Int? = null,
+    val nextPage: Int? = null,
+    val animeHeros: List<AnimeHero> = emptyList()
+)
