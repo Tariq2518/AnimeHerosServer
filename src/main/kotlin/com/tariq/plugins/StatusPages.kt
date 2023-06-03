@@ -7,7 +7,7 @@ import io.ktor.server.response.*
 
 fun Application.configureStatusPages() {
     install(StatusPages) {
-        status(HttpStatusCode.NotFound) { call, status ->
+        status(HttpStatusCode.BadGateway) { call, status ->
             call.respond(
                 message = "404: Page Not Found",
                 status = status

@@ -9,6 +9,7 @@ import io.ktor.http.*
 import com.tariq.plugins.*
 import com.tariq.repository.AnimeHeroesRepository
 import com.tariq.repository.AnimeHeroesRepositoryImp
+import io.ktor.client.call.*
 import kotlinx.serialization.json.Json
 import org.koin.java.KoinJavaComponent.inject
 
@@ -32,8 +33,6 @@ class ApplicationTest {
             )
         }
     }
-
-
     @Test
     fun `anime heroes endpoint, correct information`() = testApplication {
         environment {
@@ -67,7 +66,61 @@ class ApplicationTest {
         }
     }
 
+    @Test
+    fun `anime heroes endpoint page not found, correct information`() = testApplication {
 
+        application {
+            configureRouting()
+        }
+
+        client.get("/anime/heroes?page=7").apply {
+            assertEquals(
+                expected = HttpStatusCode.NotFound,
+                actual = status
+            )
+
+            val expectedOutput = AnimeApiResponse(
+                success = false,
+                message = "No Heroes Found"
+            )
+
+            val actualOutput = Json.decodeFromString<AnimeApiResponse>(bodyAsText())
+
+            assertEquals(
+                expected = expectedOutput,
+                actual = actualOutput
+            )
+
+        }
+    }
+
+    @Test
+    fun `anime heroes endpoint invalid page, correct information`() = testApplication {
+
+        application {
+            configureRouting()
+        }
+
+        client.get("/anime/heroes?page=f").apply {
+            assertEquals(
+                expected = HttpStatusCode.BadRequest,
+                actual = status
+            )
+
+            val expectedOutput = AnimeApiResponse(
+                success = false,
+                message = "Only Numbers allowed."
+            )
+
+            val actualOutput = Json.decodeFromString<AnimeApiResponse>(bodyAsText())
+
+            assertEquals(
+                expected = expectedOutput,
+                actual = actualOutput
+            )
+
+        }
+    }
     @Test
     fun `anime heroes endpoint all pages, correct information`() = testApplication {
         environment {
@@ -78,16 +131,6 @@ class ApplicationTest {
         }
 
         val pages = 1..6
-//        val listOfAllHeroes = listOf(
-//            animeHeroesRepository.page1,
-//            animeHeroesRepository.page2,
-//            animeHeroesRepository.page3,
-//            animeHeroesRepository.page4,
-//            animeHeroesRepository.page5,
-//            animeHeroesRepository.page6,
-//        )
-
-
         pages.forEach{
             client.get("/anime/heroes?page=$it").apply {
                 assertEquals(
@@ -134,6 +177,29 @@ class ApplicationTest {
 
         return mapOf("previousPage" to previousPage, "nextPage" to nextPage)
 
+    }
+
+    @Test
+    fun `anime search heroes endpoint, correct information`() = testApplication {
+
+        application {
+            configureRouting()
+        }
+
+        client.get("/anime/heroes/search?name=vegeta").apply {
+            assertEquals(
+                expected = HttpStatusCode.OK,
+                actual = status
+            )
+
+            val actualOutput = Json.decodeFromString<AnimeApiResponse>(bodyAsText()).animeHeroes.size
+
+            assertEquals(
+                expected = 1,
+                actual = actualOutput
+            )
+
+        }
     }
 
 }
