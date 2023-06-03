@@ -2,6 +2,7 @@ package com.tariq.repository
 
 import com.tariq.models.AnimeApiResponse
 import com.tariq.models.AnimeHero
+import org.koin.core.qualifier.named
 
 class AnimeHeroesRepositoryImp : AnimeHeroesRepository {
 
@@ -493,7 +494,7 @@ class AnimeHeroesRepositoryImp : AnimeHeroesRepository {
         return AnimeApiResponse(
             success = true,
             message = "Here are Heroes",
-            previousPage =getCurrentPage(page = page)["previousPage"],
+            previousPage = getCurrentPage(page = page)["previousPage"],
             nextPage = getCurrentPage(page = page)["nextPage"],
             animeHeroes = animeHeroes[page]!!
         )
@@ -520,7 +521,28 @@ class AnimeHeroesRepositoryImp : AnimeHeroesRepository {
 
     }
 
-    override suspend fun searchHeroes(heroName: String): AnimeApiResponse {
-        TODO("Not yet implemented")
+    override suspend fun searchHeroes(heroName: String?): AnimeApiResponse {
+        return AnimeApiResponse(
+            success = true,
+            message = "Status Ok",
+            animeHeroes =searchAnimeHeroesList(name = heroName)
+        )
+    }
+
+    private fun searchAnimeHeroesList(name: String?): List<AnimeHero> {
+        val foundedList = mutableListOf<AnimeHero>()
+
+        return if (!name.isNullOrEmpty()) {
+            animeHeroes.forEach { (_, heroes) ->
+                heroes.forEach { hero ->
+                    if (hero.name.lowercase().contains(name.lowercase())) {
+                        foundedList.add(hero)
+                    }
+                }
+            }
+            foundedList
+        } else {
+            emptyList()
+        }
     }
 }

@@ -14,5 +14,5 @@ interface AnimeHeroesRepository {
     val page6:List<AnimeHero>
     suspend fun getAllHeroes(page:Int =1): AnimeApiResponse
 
-    suspend fun searchHeroes(heroName: String): AnimeApiResponse
+    suspend fun searchHeroes(heroName: String?): AnimeApiResponse
 }
