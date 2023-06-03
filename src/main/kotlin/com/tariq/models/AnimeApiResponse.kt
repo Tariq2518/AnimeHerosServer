@@ -8,5 +8,5 @@ data class AnimeApiResponse(
     val message: String? = null,
     val previousPage: Int? = null,
     val nextPage: Int? = null,
-    val animeHeros: List<AnimeHero> = emptyList()
+    val animeHeroes: List<AnimeHero> = emptyList()
 )
