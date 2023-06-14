@@ -33,6 +33,7 @@ class ApplicationTest {
             )
         }
     }
+
     @Test
     fun `anime heroes endpoint, correct information`() = testApplication {
         environment {
@@ -121,6 +122,7 @@ class ApplicationTest {
 
         }
     }
+
     @Test
     fun `anime heroes endpoint all pages, correct information`() = testApplication {
         environment {
@@ -131,23 +133,26 @@ class ApplicationTest {
         }
 
         val pages = 1..6
-        pages.forEach{
+        pages.forEach {
             client.get("/anime/heroes?page=$it").apply {
                 assertEquals(
                     expected = HttpStatusCode.OK,
                     actual = status
                 )
-
+                val actualOutput = Json.decodeFromString<AnimeApiResponse>(bodyAsText())
                 val expectedOutput = AnimeApiResponse(
                     success = true,
                     message = "Here are Heroes",
                     previousPage = getCurrentPage(page = it)["previousPage"],
                     nextPage = getCurrentPage(page = it)["nextPage"],
-                    animeHeroes = listOf(animeHeroesRepository.page1, animeHeroesRepository.page2, animeHeroesRepository.page3,
-                        animeHeroesRepository.page4, animeHeroesRepository.page5, animeHeroesRepository.page6)[it -1]
+                    animeHeroes = listOf(
+                        animeHeroesRepository.page1, animeHeroesRepository.page2, animeHeroesRepository.page3,
+                        animeHeroesRepository.page4, animeHeroesRepository.page5, animeHeroesRepository.page6
+                    )[it - 1],
+                    lastUpdated = actualOutput.lastUpdated
                 )
 
-                val actualOutput = Json.decodeFromString<AnimeApiResponse>(bodyAsText())
+
 
                 assertEquals(
                     expected = expectedOutput,

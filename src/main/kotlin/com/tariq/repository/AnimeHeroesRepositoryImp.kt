@@ -496,7 +496,8 @@ class AnimeHeroesRepositoryImp : AnimeHeroesRepository {
             message = "Here are Heroes",
             previousPage = getCurrentPage(page = page)["previousPage"],
             nextPage = getCurrentPage(page = page)["nextPage"],
-            animeHeroes = animeHeroes[page]!!
+            animeHeroes = animeHeroes[page]!!,
+            lastUpdated = System.currentTimeMillis()
         )
     }
 
