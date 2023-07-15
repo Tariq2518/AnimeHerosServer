@@ -1,4 +1,3 @@
-import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
 
 val ktorVersion: String by project
 val kotlinVersion: String by project
@@ -24,15 +23,7 @@ application {
 }
 
 
-configure<AppEngineAppYamlExtension> {
-    stage {
-        setArtifact("build/libs/${project.name}-all.jar")
-    }
-    deploy {
-        version = "GCLOUD_CONFIG"
-        projectId = "GCLOUD_CONFIG"
-    }
-}
+
 
 tasks.create("stage") {
     dependsOn("installDist")
@@ -57,4 +48,8 @@ dependencies {
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
+
+    implementation("com.google.firebase:firebase-admin:7.1.0")
+    implementation("io.ktor:ktor-auth-firebase:$ktorVersion")
+
 }
