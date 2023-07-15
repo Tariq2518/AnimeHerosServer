@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "animeheroserver",
+    "public": "AnimeInfoServer",
     "ignore": [
       "firebase.json",
       "**/.*",
