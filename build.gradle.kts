@@ -10,6 +10,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.google.cloud.tools.appengine") version "2.4.2"
+
 }
 
 
@@ -17,10 +18,10 @@ group = "com.tariq"
 version = "0.0.1"
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
-
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
+
 
 
 
@@ -31,6 +32,8 @@ tasks.create("stage") {
 
 repositories {
     mavenCentral()
+    mavenLocal()
+    jcenter()
 }
 
 dependencies {
@@ -49,7 +52,5 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
 
-    implementation("com.google.firebase:firebase-admin:7.1.0")
-    implementation("io.ktor:ktor-auth-firebase:$ktorVersion")
 
 }

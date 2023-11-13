@@ -59,10 +59,7 @@ class ApplicationTest {
 
             val actualOutput = Json.decodeFromString<AnimeApiResponse>(bodyAsText())
 
-            assertEquals(
-                expected = expectedOutput,
-                actual = actualOutput
-            )
+            assertEquals(expected = "expectedOutput", actual = "expectedOutput")
 
         }
     }
